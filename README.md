@@ -33,6 +33,40 @@ it in `inputs/<day-number>` to cache it. Those files are not tracked by git.
 Running the file (`ruby day-01.rb`) will display the result of your `#first_part` methods, then the result to your
 `#second_part` method in order, accompanied each by the time it took to run it.
 
+**Example:**
+```ruby
+require_relative 'common'
+
+## file contents of input/1
+# 123
+# 456
+# 789
+
+class Day1 < AdventDay
+  def first_part
+    input.last(2).sum
+  end
+
+  def second_part
+    input.last(2).map(&:to_s).map(&:reverse).map(&:to_i).sum
+  end
+
+  private
+
+  def convert_data(data)
+    super.map(&:to_i)
+  end
+end
+
+Day1.solve
+```
+```shell
+% ruby day-01.rb
+
+1245 - 0.342ms
+1641 - 0.108ms
+```
+
 ## Utility methods
 
 In the `common.rb` file you'll find the AdventDay framework class, and a `Patches` module containing some utility
