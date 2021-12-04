@@ -63,31 +63,32 @@ Day1.solve
 ```shell
 % ruby day-01.rb
 
-1245 - 0.342ms
-1641 - 0.108ms
+#1. 1245 - 0.342ms
+#2. 1641 - 0.108ms
 ```
 
 ### Test data
 
-You can provide your own test input if you want by adding a `inputs/debug-{day}` file in your file structure, then
-running the solution with the `--debug` flag.
+By running the solution with the `--debug` flag, the class will attempt to get the example input from the text of the
+puzzle, then run your solution against it. If it does not manage to get the example input (or if you want to override it
+with your own), you can simply provide it in the `inputs/debug-{day}` file.
 
 **Example:**
 
 ```shell
-% echo '234\n567\890' > inputs/debug-1
+% echo '12\n34\56' > inputs/debug-1
 % ruby day-01.rb # Still works as previously
 
-1245 - 0.342ms
-1641 - 0.108ms
+#1. 1245 - 0.342ms
+#2. 1641 - 0.108ms
 
 % ruby day-01.rb --debug # Runs on debug input
 
-801 - 0.236ms
-1197 - 0.182ms
+#1. 46 - 0.301ms
+#2. 64 - 0.237ms
 ```
 
-Another way to provide your own test data is to override the `#debug_input` method in your `DayX` class:
+Another way to provide your own debug data is to override the `#debug_input` method in your `DayX` class:
 
 ```ruby
 require_relative 'common'
@@ -108,7 +109,7 @@ class Day1 < AdventDay
   end
 
   def debug_data
-    "234\n567\n890" # Formatted like the input !- PRE #convert_data -!
+    "13\n34\n56" # Formatted like the input !- PRE #convert_data -!
   end
 end
 
@@ -118,6 +119,60 @@ Day1.solve
 **⚠️  Caution: the result of `#debug_input` will still be fed to `convert_data`, to test the whole solution —
 be careful to have it return a string formatted similarly to the input you're going to solve later.**
 
+
+### Checking your solution against expected values
+
+It is possible to provide expected result values, which will be compared to the results of running your solution
+against [debug data](#test-data) before running your actual solver.
+
+The first way is to provide an `EXPECTED_RESULTS` constant Hash inside the class, containing the expected results:
+
+```ruby
+require_relative 'common'
+
+class Day1 < AdventDay
+  EXPECTED_RESULTS = { 1 => 46, 2 => 64 }.freeze
+
+  def first_part
+    input.last(2).sum
+  end
+
+  def second_part
+    input.last(2).map(&:to_s).map(&:reverse).map(&:to_i).sum
+  end
+
+  private
+
+  def convert_data(data)
+    super.map(&:to_i)
+  end
+end
+
+Day1.solve
+```
+
+```shell
+% cat '12\n34\n56' > inputs/debug-01.rb
+% ruby day-01.rb
+
+EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
+
+#1. 1245 - 0.317ms
+#2. 1641 - 0.263ms
+```
+
+But it is also possible to provide the expected results through the CLI with use of the `--test` argument: (in which
+case the suplied values take precedence over the ones in the eventual constant)
+```shell
+% ruby day-01.rb --test 46,64
+
+EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
+
+#1. 1245 - 0.317ms
+#2. 1641 - 0.263ms
+```
+
+Trying to run in test mode without providing either hte constant or a `--test` parameter will raise an error.
 
 ## Utility methods
 
