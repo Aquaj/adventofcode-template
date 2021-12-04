@@ -5,6 +5,7 @@ gem 'byebug'
 # Framework dependencies
 gem 'dotenv'
 gem 'faraday'
+gem 'colorize'
 
 # If you duplicate your repository from year to year, feel free to keep your gems in additional groups here
 # Example:

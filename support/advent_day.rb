@@ -9,8 +9,8 @@ class AdventDay
   class << self
     def solve
       run_tests if test?
-      puts " - #{(Benchmark.measure { print "#1. #{self.new.first_part.inspect}"  }.real * 1000).round(3)}ms"
-      puts " - #{(Benchmark.measure { print "#2. #{self.new.second_part.inspect}" }.real * 1000).round(3)}ms"
+      puts " - #{(Benchmark.measure { print "#1. #{self.new.first_part.inspect.bold}"  }.real * 1000).round(3)}ms"
+      puts " - #{(Benchmark.measure { print "#2. #{self.new.second_part.inspect.bold}" }.real * 1000).round(3)}ms"
     end
 
     def run_tests

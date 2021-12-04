@@ -6,7 +6,10 @@ Bundler.require
 FLAGS = {
   test: '--test',
   debug: '--debug',
+  no_color: '--no-color',
 }
+
+String.disable_colorization = ARGV.include? FLAGS[:no_color]
 
 require_relative 'support/advent_day'
 require_relative 'support/patches'

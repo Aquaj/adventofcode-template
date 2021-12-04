@@ -15,13 +15,13 @@ class TestRunner
 
       info = { part: part, expected: expected.inspect, actual: actual.inspect }
       if actual&.to_i == expected&.to_i
-        (SUCCESS_MESSAGE % info)
+        (SUCCESS_MESSAGE % info).green
       else
-        (FAILURE_MESSAGE % info)
+        (FAILURE_MESSAGE % info).red
       end
     end
 
-    puts "EXAMPLES: #{test_results.join(' | ') }"
+    puts "EXAMPLES: ".bold+"#{test_results.join(' | '.bold) }"
     puts
   end
 
