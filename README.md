@@ -6,6 +6,7 @@ This repository template provides:
 - a clean README in the eventuality you'd make your solutions public afterwards (see [Usable README](#usable-readme))
 - a simple way to interact with the Advent of Code problems (with the AdventDay class) (see [The day-xx.rb
     files](#the-day-xxrb-files))
+- a basic test runner to check your solution with (see [Checking your solution against expected values](#checking-your-solution-against-expected-values))
 - some general-purposes standard lib enhancements (see [Utility methods](#utility-methods))
 
 ## ENV
@@ -66,6 +67,11 @@ $ ruby day-01.rb
 #1. 1245 - 0.342ms
 #2. 1641 - 0.108ms
 ```
+
+### Colors and formatting
+
+The output of the solver might be formatted (bold/italics/...) and/or colored. If this is an issue, you can disable it
+by running your files with the flag `--no-color`, or by putting `COLOR=false` in your ENV.
 
 ### Test data
 
@@ -173,6 +179,9 @@ EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
 ```
 
 Trying to run in test mode without providing either hte constant or a `--test` parameter will raise an error.
+
+NOTE: the output of test runs is colorized green or red according to the success or failure of the comparison, if this
+is an issue check [Colors and formatting](#colors-and-formatting) to disable it.
 
 ## Utility methods
 
