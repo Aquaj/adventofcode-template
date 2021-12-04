@@ -90,8 +90,8 @@ $ ruby day-01.rb # Still works as previously
 
 $ ruby day-01.rb --debug # Runs on debug input
 
-#1. 46 - 0.301ms
-#2. 64 - 0.237ms
+#1. 90 - 0.301ms
+#2. 108 - 0.237ms
 ```
 
 Another way to provide your own debug data is to override the `#debug_input` method in your `DayX` class:
@@ -137,7 +137,7 @@ The first way is to provide an `EXPECTED_RESULTS` constant Hash inside the class
 require_relative 'common'
 
 class Day1 < AdventDay
-  EXPECTED_RESULTS = { 1 => 46, 2 => 64 }.freeze
+  EXPECTED_RESULTS = { 1 => 90, 2 => 108 }.freeze
 
   def first_part
     input.last(2).sum
@@ -161,7 +161,7 @@ Day1.solve
 $ cat '12\n34\n56' > inputs/debug-01.rb
 $ ruby day-01.rb
 
-EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
+EXAMPLES: 1 - (90: 90) ✔  | 2 - (108: 108) ✔
 
 #1. 1245 - 0.317ms
 #2. 1641 - 0.263ms
@@ -170,9 +170,9 @@ EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
 But it is also possible to provide the expected results through the CLI with use of the `--test` argument: (in which
 case the suplied values take precedence over the ones in the eventual constant)
 ```console
-$ ruby day-01.rb --test 46,64
+$ ruby day-01.rb --test 90,108
 
-EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
+EXAMPLES: 1 - (90: 90) ✔  | 2 - (108: 108) ✔
 
 #1. 1245 - 0.317ms
 #2. 1641 - 0.263ms
