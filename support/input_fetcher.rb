@@ -51,7 +51,14 @@ class InputFetcher
   end
 
   def download_debug_input
-    raise "Can't run debug mode without debug input #{file_path}"
+    res = fetch(AOC_BASE_URL + PUZZLE_PATH_SCHEME % { year: year, number: day_number })
+
+    # example is always the first `code` block after a "for example" sentence
+    example_input = res.body&.match(/For example.*:.*/mi)[0]&.match(/<code>(.*?)<\/code>/m)[1] rescue nil
+    raise "Couldn't fetch debug input automatically. Please set it by hand in #{debug_file_path}." unless example_input
+
+    File.write(debug_file_path, example_input)
+    example_input
   end
 
   def fetch(path)
