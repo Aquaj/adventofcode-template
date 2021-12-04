@@ -67,6 +67,58 @@ Day1.solve
 1641 - 0.108ms
 ```
 
+### Test data
+
+You can provide your own test input if you want by adding a `inputs/debug-{day}` file in your file structure, then
+running the solution with the `--debug` flag.
+
+**Example:**
+
+```shell
+% echo '234\n567\890' > inputs/debug-1
+% ruby day-01.rb # Still works as previously
+
+1245 - 0.342ms
+1641 - 0.108ms
+
+% ruby day-01.rb --debug # Runs on debug input
+
+801 - 0.236ms
+1197 - 0.182ms
+```
+
+Another way to provide your own test data is to override the `#debug_input` method in your `DayX` class:
+
+```ruby
+require_relative 'common'
+
+class Day1 < AdventDay
+  def first_part
+    input.last(2).sum
+  end
+
+  def second_part
+    input.last(2).map(&:to_s).map(&:reverse).map(&:to_i).sum
+  end
+
+  private
+
+  def convert_data(data)
+    super.map(&:to_i)
+  end
+
+  def debug_data
+    "234\n567\n890" # Formatted like the input !- PRE #convert_data -!
+  end
+end
+
+Day1.solve
+```
+
+**⚠️  Caution: the result of `#debug_input` will still be fed to `convert_data`, to test the whole solution —
+be careful to have it return a string formatted similarly to the input you're going to solve later.**
+
+
 ## Utility methods
 
 In the `support/` folder you'll find the `AdventDay` framework class (`support/advent_day.rb`), and a `Patches` module
