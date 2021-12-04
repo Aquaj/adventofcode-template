@@ -1,14 +1,29 @@
 require 'benchmark'
 
+require_relative 'test_runner'
 require_relative 'input_fetcher'
 
 class AdventDay
   YEAR = ENV['YEAR']
-  DEBUG_FLAG = '--debug'
 
-  def self.solve
-    puts " - #{(Benchmark.measure { print self.new.first_part.inspect  }.real * 1000).round(3)}ms"
-    puts " - #{(Benchmark.measure { print self.new.second_part.inspect }.real * 1000).round(3)}ms"
+  class << self
+    def solve
+      run_tests if test?
+      puts " - #{(Benchmark.measure { print "#1. #{self.new.first_part.inspect.bold}"  }.real * 1000).round(3)}ms"
+      puts " - #{(Benchmark.measure { print "#2. #{self.new.second_part.inspect.bold}" }.real * 1000).round(3)}ms"
+    end
+
+    def run_tests
+      TestRunner.new(self).run
+    end
+
+    def test?
+      ARGV.include?(FLAGS[:test]) || defined?(self::EXPECTED_RESULTS)
+    end
+
+    def debug?
+      ARGV.include? FLAGS[:debug]
+    end
   end
 
   def first_part; end
@@ -35,9 +50,16 @@ class AdventDay
     InputFetcher.new(day_number, YEAR, debug: true).get
   end
 
+  def debug!
+    @debug = true
+  end
+
+  def test?
+    self.class.test?
+  end
+
   def debug?
-    return @debug if defined?(@debug)
-    @debug = ARGV.include? DEBUG_FLAG
+    @debug || self.class.debug?
   end
 
   def day_number

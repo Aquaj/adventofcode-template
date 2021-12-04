@@ -6,6 +6,7 @@ This repository template provides:
 - a clean README in the eventuality you'd make your solutions public afterwards (see [Usable README](#usable-readme))
 - a simple way to interact with the Advent of Code problems (with the AdventDay class) (see [The day-xx.rb
     files](#the-day-xxrb-files))
+- a basic test runner to check your solution with (see [Checking your solution against expected values](#checking-your-solution-against-expected-values))
 - some general-purposes standard lib enhancements (see [Utility methods](#utility-methods))
 
 ## ENV
@@ -60,34 +61,40 @@ end
 
 Day1.solve
 ```
-```shell
-% ruby day-01.rb
+```console
+$ ruby day-01.rb
 
-1245 - 0.342ms
-1641 - 0.108ms
+#1. 1245 - 0.342ms
+#2. 1641 - 0.108ms
 ```
+
+### Colors and formatting
+
+The output of the solver might be formatted (bold/italics/...) and/or colored. If this is an issue, you can disable it
+by running your files with the flag `--no-color`, or by putting `COLOR=false` in your ENV.
 
 ### Test data
 
-You can provide your own test input if you want by adding a `inputs/debug-{day}` file in your file structure, then
-running the solution with the `--debug` flag.
+By running the solution with the `--debug` flag, the class will attempt to get the example input from the text of the
+puzzle, then run your solution against it. If it does not manage to get the example input (or if you want to override it
+with your own), you can simply provide it in the `inputs/debug-{day}` file.
 
 **Example:**
 
-```shell
-% echo '234\n567\890' > inputs/debug-1
-% ruby day-01.rb # Still works as previously
+```console
+$ echo '12\n34\n56' > inputs/debug-1
+$ ruby day-01.rb # Still works as previously
 
-1245 - 0.342ms
-1641 - 0.108ms
+#1. 1245 - 0.342ms
+#2. 1641 - 0.108ms
 
-% ruby day-01.rb --debug # Runs on debug input
+$ ruby day-01.rb --debug # Runs on debug input
 
-801 - 0.236ms
-1197 - 0.182ms
+#1. 46 - 0.301ms
+#2. 64 - 0.237ms
 ```
 
-Another way to provide your own test data is to override the `#debug_input` method in your `DayX` class:
+Another way to provide your own debug data is to override the `#debug_input` method in your `DayX` class:
 
 ```ruby
 require_relative 'common'
@@ -108,7 +115,7 @@ class Day1 < AdventDay
   end
 
   def debug_data
-    "234\n567\n890" # Formatted like the input !- PRE #convert_data -!
+    "13\n34\n56" # Formatted like the input !- PRE #convert_data -!
   end
 end
 
@@ -118,6 +125,63 @@ Day1.solve
 **⚠️  Caution: the result of `#debug_input` will still be fed to `convert_data`, to test the whole solution —
 be careful to have it return a string formatted similarly to the input you're going to solve later.**
 
+
+### Checking your solution against expected values
+
+It is possible to provide expected result values, which will be compared to the results of running your solution
+against [debug data](#test-data) before running your actual solver.
+
+The first way is to provide an `EXPECTED_RESULTS` constant Hash inside the class, containing the expected results:
+
+```ruby
+require_relative 'common'
+
+class Day1 < AdventDay
+  EXPECTED_RESULTS = { 1 => 46, 2 => 64 }.freeze
+
+  def first_part
+    input.last(2).sum
+  end
+
+  def second_part
+    input.last(2).map(&:to_s).map(&:reverse).map(&:to_i).sum
+  end
+
+  private
+
+  def convert_data(data)
+    super.map(&:to_i)
+  end
+end
+
+Day1.solve
+```
+
+```console
+$ cat '12\n34\n56' > inputs/debug-01.rb
+$ ruby day-01.rb
+
+EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
+
+#1. 1245 - 0.317ms
+#2. 1641 - 0.263ms
+```
+
+But it is also possible to provide the expected results through the CLI with use of the `--test` argument: (in which
+case the suplied values take precedence over the ones in the eventual constant)
+```console
+$ ruby day-01.rb --test 46,64
+
+EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
+
+#1. 1245 - 0.317ms
+#2. 1641 - 0.263ms
+```
+
+Trying to run in test mode without providing either hte constant or a `--test` parameter will raise an error.
+
+NOTE: the output of test runs is colorized green or red according to the success or failure of the comparison, if this
+is an issue check [Colors and formatting](#colors-and-formatting) to disable it.
 
 ## Utility methods
 
@@ -172,33 +236,33 @@ with other competitors.
 ## Puzzles
 
 <!-- On-hand emojis: ⏳ ✔ 🌟 -->
-|| Day  | Part One | Part Two | Solutions
-|:---:|---|:---:|:---:|:---:|
-|   |[Day 1: TBD](https://adventofcode.com/20xx/day/1)|    |    |[Solution](day-01.rb)
-|   |[Day 2: TBD](https://adventofcode.com/20xx/day/2)|    |    |[Solution](day-02.rb)
-|   |[Day 3: TBD](https://adventofcode.com/20xx/day/3)|    |    |[Solution](day-03.rb)
-|   |[Day 4: TBD](https://adventofcode.com/20xx/day/4)|    |    |[Solution](day-04.rb)
-|   |[Day 5: TBD](https://adventofcode.com/20xx/day/5)|    |    |[Solution](day-05.rb)
-|   |[Day 6: TBD](https://adventofcode.com/20xx/day/6)|    |    |[Solution](day-06.rb)
-|   |[Day 7: TBD](https://adventofcode.com/20xx/day/7)|    |    |[Solution](day-07.rb)
-|   |[Day 8: TBD](https://adventofcode.com/20xx/day/8)|    |    |[Solution](day-08.rb)
-|   |[Day 9: TBD](https://adventofcode.com/20xx/day/9)|    |    |[Solution](day-09.rb)
-|   |[Day 10: TBD](https://adventofcode.com/20xx/day/10)|    |    |[Solution](day-10.rb)
-|   |[Day 11: TBD](https://adventofcode.com/20xx/day/11)|    |    |[Solution](day-11.rb)
-|   |[Day 12: TBD](https://adventofcode.com/20xx/day/12)|    |    |[Solution](day-12.rb)
-|   |[Day 13: TBD](https://adventofcode.com/20xx/day/13)|    |    |[Solution](day-13.rb)
-|   |[Day 14: TBD](https://adventofcode.com/20xx/day/14)|    |    |[Solution](day-14.rb)
-|   |[Day 15: TBD](https://adventofcode.com/20xx/day/15)|    |    |[Solution](day-15.rb)
-|   |[Day 16: TBD](https://adventofcode.com/20xx/day/16)|    |    |[Solution](day-16.rb)
-|   |[Day 17: TBD](https://adventofcode.com/20xx/day/17)|    |    |[Solution](day-17.rb)
-|   |[Day 18: TBD](https://adventofcode.com/20xx/day/18)|    |    |[Solution](day-18.rb)
-|   |[Day 19: TBD](https://adventofcode.com/20xx/day/19)|    |    |[Solution](day-19.rb)
-|   |[Day 20: TBD](https://adventofcode.com/20xx/day/20)|    |    |[Solution](day-20.rb)
-|   |[Day 21: TBD](https://adventofcode.com/20xx/day/21)|    |    |[Solution](day-21.rb)
-|   |[Day 22: TBD](https://adventofcode.com/20xx/day/22)|    |    |[Solution](day-22.rb)
-|   |[Day 23: TBD](https://adventofcode.com/20xx/day/23)|    |    |[Solution](day-23.rb)
-|   |[Day 24: TBD](https://adventofcode.com/20xx/day/24)|    |    |[Solution](day-24.rb)
-|   |[Day 25: TBD](https://adventofcode.com/20xx/day/25)|    |    |[Solution](day-25.rb)
+|       | Day                                                 | Part One | Part Two | Solutions
+| :---: | ---                                                 |  :---:   |  :---:   | :---:
+|       | [Day 1: TBD](https://adventofcode.com/20xx/day/1)   |          |          | [Solution](day-01.rb)
+|       | [Day 2: TBD](https://adventofcode.com/20xx/day/2)   |          |          | [Solution](day-02.rb)
+|       | [Day 3: TBD](https://adventofcode.com/20xx/day/3)   |          |          | [Solution](day-03.rb)
+|       | [Day 4: TBD](https://adventofcode.com/20xx/day/4)   |          |          | [Solution](day-04.rb)
+|       | [Day 5: TBD](https://adventofcode.com/20xx/day/5)   |          |          | [Solution](day-05.rb)
+|       | [Day 6: TBD](https://adventofcode.com/20xx/day/6)   |          |          | [Solution](day-06.rb)
+|       | [Day 7: TBD](https://adventofcode.com/20xx/day/7)   |          |          | [Solution](day-07.rb)
+|       | [Day 8: TBD](https://adventofcode.com/20xx/day/8)   |          |          | [Solution](day-08.rb)
+|       | [Day 9: TBD](https://adventofcode.com/20xx/day/9)   |          |          | [Solution](day-09.rb)
+|       | [Day 10: TBD](https://adventofcode.com/20xx/day/10) |          |          | [Solution](day-10.rb)
+|       | [Day 11: TBD](https://adventofcode.com/20xx/day/11) |          |          | [Solution](day-11.rb)
+|       | [Day 12: TBD](https://adventofcode.com/20xx/day/12) |          |          | [Solution](day-12.rb)
+|       | [Day 13: TBD](https://adventofcode.com/20xx/day/13) |          |          | [Solution](day-13.rb)
+|       | [Day 14: TBD](https://adventofcode.com/20xx/day/14) |          |          | [Solution](day-14.rb)
+|       | [Day 15: TBD](https://adventofcode.com/20xx/day/15) |          |          | [Solution](day-15.rb)
+|       | [Day 16: TBD](https://adventofcode.com/20xx/day/16) |          |          | [Solution](day-16.rb)
+|       | [Day 17: TBD](https://adventofcode.com/20xx/day/17) |          |          | [Solution](day-17.rb)
+|       | [Day 18: TBD](https://adventofcode.com/20xx/day/18) |          |          | [Solution](day-18.rb)
+|       | [Day 19: TBD](https://adventofcode.com/20xx/day/19) |          |          | [Solution](day-19.rb)
+|       | [Day 20: TBD](https://adventofcode.com/20xx/day/20) |          |          | [Solution](day-20.rb)
+|       | [Day 21: TBD](https://adventofcode.com/20xx/day/21) |          |          | [Solution](day-21.rb)
+|       | [Day 22: TBD](https://adventofcode.com/20xx/day/22) |          |          | [Solution](day-22.rb)
+|       | [Day 23: TBD](https://adventofcode.com/20xx/day/23) |          |          | [Solution](day-23.rb)
+|       | [Day 24: TBD](https://adventofcode.com/20xx/day/24) |          |          | [Solution](day-24.rb)
+|       | [Day 25: TBD](https://adventofcode.com/20xx/day/25) |          |          | [Solution](day-25.rb)
 
 ## Running the code
 

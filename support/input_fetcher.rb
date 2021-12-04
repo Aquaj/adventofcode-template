@@ -3,6 +3,8 @@ require 'net/http'
 
 class InputFetcher
   SESSION = ENV['SESSION']
+  INPUT_FILE_NAME_FORMAT = 'inputs/%{number}'
+  DEBUG_FILE_NAME_FORMAT = 'inputs/debug-%{number}'
 
   attr_reader :day_number, :year
   def debug?; @debug; end
@@ -16,7 +18,7 @@ class InputFetcher
   def get
     return File.read(file_path) if file_path.exist?
     if debug?
-      raise "Can't run debug mode without debug input #{file_path}"
+      download_debug_input
     else
       download_input
     end
@@ -24,24 +26,49 @@ class InputFetcher
 
   def file_path
     if debug?
-      Pathname.new('inputs/debug-'+day_number)
+      debug_file_path
     else
-      Pathname.new('inputs/'+day_number)
+      source_file_path
     end
   end
 
-  INPUT_BASE_URL = 'https://adventofcode.com'.freeze
-  INPUT_PATH_SCHEME = '/%{year}/day/%{number}/input'.freeze
+  def source_file_path
+    Pathname.new(INPUT_FILE_NAME_FORMAT % { number: day_number })
+  end
+
+  def debug_file_path
+    Pathname.new(DEBUG_FILE_NAME_FORMAT % { number: day_number })
+  end
+
+  AOC_BASE_URL = 'https://adventofcode.com'.freeze
+  PUZZLE_PATH_SCHEME = '/%{year}/day/%{number}'.freeze
+  INPUT_PATH_SCHEME = "#{PUZZLE_PATH_SCHEME}/input".freeze
 
   def download_input
-    raise "Cannot download input without a session cookie" unless SESSION
+    res = fetch(AOC_BASE_URL + INPUT_PATH_SCHEME % { year: year, number: day_number })
+    File.write(source_file_path, res.body)
+    res.body
+  end
+
+  def download_debug_input
+    res = fetch(AOC_BASE_URL + PUZZLE_PATH_SCHEME % { year: year, number: day_number })
+
+    # example is always the first `code` block after a "for example" sentence
+    example_input = res.body&.match(/For example.*:.*/mi)[0]&.match(/<code>(.*?)<\/code>/m)[1] rescue nil
+    raise "Couldn't fetch debug input automatically. Please set it by hand in #{debug_file_path}." unless example_input
+
+    File.write(debug_file_path, example_input)
+    example_input
+  end
+
+  def fetch(path)
+    raise "Cannot download without a session cookie" unless SESSION
     res = Faraday.get(
-      INPUT_BASE_URL + INPUT_PATH_SCHEME % { year: year, number: day_number },
+      path,
       nil,
       { 'Cookie' => "session=#{SESSION}" },
     )
-    raise "Input doesn't appear to be accessible (yet?)" if res.status == 404
-    File.write('inputs/'+day_number, res.body)
-    res.body
+    raise "Page doesn't appear to be accessible (yet?)" if res.status == 404
+    res
   end
 end
