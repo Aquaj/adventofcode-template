@@ -82,7 +82,7 @@ with your own), you can simply provide it in the `inputs/debug-{day}` file.
 **Example:**
 
 ```console
-$ echo '12\n34\56' > inputs/debug-1
+$ echo '12\n34\n56' > inputs/debug-1
 $ ruby day-01.rb # Still works as previously
 
 #1. 1245 - 0.342ms
