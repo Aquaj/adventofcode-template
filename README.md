@@ -6,7 +6,7 @@ This repository template provides:
 - a clean README in the eventuality you'd make your solutions public afterwards (see [Usable README](#usable-readme))
 - a simple way to interact with the Advent of Code problems (with the AdventDay class) (see [The day-xx.rb
     files](#the-day-xxrb-files))
-- some gneral-purposes standard lib enhancements (see [Utility Methods](#utility-methods))
+- some general-purposes standard lib enhancements (see [Utility methods](#utility-methods))
 
 ## ENV
 
@@ -69,8 +69,9 @@ Day1.solve
 
 ## Utility methods
 
-In the `common.rb` file you'll find the AdventDay framework class, and a `Patches` module containing some utility
-patches to the standard ruby library that I've found useful to keep at hand during exercises.
+In the `support/` folder you'll find the `AdventDay` framework class (`support/advent_day.rb`), and a `Patches` module
+(`support/patches.rb`) containing some utility patches to the standard ruby library that I've found useful to keep at
+hand during exercises.
 
 Feel free to add your own to it.
 
