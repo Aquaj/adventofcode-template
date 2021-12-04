@@ -60,8 +60,8 @@ end
 
 Day1.solve
 ```
-```shell
-% ruby day-01.rb
+```console
+$ ruby day-01.rb
 
 #1. 1245 - 0.342ms
 #2. 1641 - 0.108ms
@@ -75,14 +75,14 @@ with your own), you can simply provide it in the `inputs/debug-{day}` file.
 
 **Example:**
 
-```shell
-% echo '12\n34\56' > inputs/debug-1
-% ruby day-01.rb # Still works as previously
+```console
+$ echo '12\n34\56' > inputs/debug-1
+$ ruby day-01.rb # Still works as previously
 
 #1. 1245 - 0.342ms
 #2. 1641 - 0.108ms
 
-% ruby day-01.rb --debug # Runs on debug input
+$ ruby day-01.rb --debug # Runs on debug input
 
 #1. 46 - 0.301ms
 #2. 64 - 0.237ms
@@ -151,9 +151,9 @@ end
 Day1.solve
 ```
 
-```shell
-% cat '12\n34\n56' > inputs/debug-01.rb
-% ruby day-01.rb
+```console
+$ cat '12\n34\n56' > inputs/debug-01.rb
+$ ruby day-01.rb
 
 EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
 
@@ -163,8 +163,8 @@ EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
 
 But it is also possible to provide the expected results through the CLI with use of the `--test` argument: (in which
 case the suplied values take precedence over the ones in the eventual constant)
-```shell
-% ruby day-01.rb --test 46,64
+```console
+$ ruby day-01.rb --test 46,64
 
 EXAMPLES: 1 - (46: 46) ✔  | 2 - (64: 64) ✔
 
