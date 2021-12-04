@@ -75,9 +75,8 @@ by running your files with the flag `--no-color`, or by putting `COLOR=false` in
 
 ### Test data
 
-By running the solution with the `--debug` flag, the class will attempt to get the example input from the text of the
-puzzle, then run your solution against it. If it does not manage to get the example input (or if you want to override it
-with your own), you can simply provide it in the `inputs/debug-{day}` file.
+By running the solution with the `--debug` flag, the solver will attempt to find debug data in the `inputs/debug-{day}`
+file.
 
 **Example:**
 
