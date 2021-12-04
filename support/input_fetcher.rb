@@ -5,19 +5,29 @@ class InputFetcher
   SESSION = ENV['SESSION']
 
   attr_reader :day_number, :year
+  def debug?; @debug; end
 
-  def initialize(day_number, year)
+  def initialize(day_number, year, debug: false)
     @day_number = day_number
     @year = year
+    @debug = debug
   end
 
   def get
     return File.read(file_path) if file_path.exist?
-    download_input
+    if debug?
+      raise "Can't run debug mode without debug input #{file_path}"
+    else
+      download_input
+    end
   end
 
   def file_path
-    Pathname.new('inputs/'+day_number)
+    if debug?
+      Pathname.new('inputs/debug-'+day_number)
+    else
+      Pathname.new('inputs/'+day_number)
+    end
   end
 
   INPUT_BASE_URL = 'https://adventofcode.com'.freeze
