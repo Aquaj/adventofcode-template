@@ -5,6 +5,7 @@ Bundler.require
 
 FLAGS = {
   test: '--test',
+  copy: '--copy',
   debug: '--debug',
   no_color: '--no-color',
 }

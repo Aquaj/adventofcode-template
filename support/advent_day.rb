@@ -9,13 +9,24 @@ class AdventDay
   class << self
     def solve
       run_tests if test?
-      puts " - #{(Benchmark.measure { print "#1. #{self.new.first_part.inspect.bold}"  }.real * 1000).round(3)}ms"
-      puts " - #{(Benchmark.measure { print "#2. #{self.new.second_part.inspect.bold}" }.real * 1000).round(3)}ms"
+      results = {}
+      puts " - #{(Benchmark.measure { print "#1. #{(results[1] = self.new.first_part).inspect.bold}"  }.real * 1000).round(3)}ms"
+      puts " - #{(Benchmark.measure { print "#2. #{(results[2] = self.new.second_part).inspect.bold}" }.real * 1000).round(3)}ms"
+      Clipboard.copy(results[copy_to]) if copy?
     end
 
     def run_tests
       TestRunner.new(self).run
     end
+
+    # --test followed by space followed by 1 or 2 word-likes separated by a comma
+    TEST_FLAG_FORMAT = /#{FLAGS[:copy]} (\d)/
+    def copy_to
+      match = ARGV.join(' ').match(TEST_FLAG_FORMAT)
+      return unless match
+      match[1].to_i
+    end
+    alias_method :copy?, :copy_to
 
     def test?
       ARGV.include?(FLAGS[:test]) || defined?(self::EXPECTED_RESULTS)
