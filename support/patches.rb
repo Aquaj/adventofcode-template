@@ -16,6 +16,27 @@ module Patches
   end
   Enumerator.include Nth
 
+  module Product
+    def product(enum)
+      Enumerator.new do |yielder|
+        self.each do |a|
+          enum.each do |b|
+            yielder << [a, b]
+          end
+        end
+      end
+    end
+  end
+  Enumerable.include Product
+
+  module Towards
+    def towards(num)
+      return self.downto(num) if self > num
+      self.upto(num)
+    end
+  end
+  Numeric.include Towards
+
   module ConvenientAccess
     def first
       chars.first
