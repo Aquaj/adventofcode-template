@@ -4,8 +4,8 @@
 This repository template provides:
 - some common useful libraries (run `bundle install` to fetch them)
 - a clean README in the eventuality you'd make your solutions public afterwards (see [Usable README](#usable-readme))
-- a simple way to interact with the Advent of Code problems (with the AdventDay class) (see [The day-xx.rb
-    files](#the-day-xxrb-files))
+- a simple structure to interact with the Advent of Code problems (see [The day-xx.rb files](#the-day-xxrb-files))
+- automatic copying of the solution to your clipboard (see [Clipboard access](#clipboard-access))
 - a basic test runner to check your solution with (see [Checking your solution against expected values](#checking-your-solution-against-expected-values))
 - some general-purposes standard lib enhancements (see [Utility methods](#utility-methods))
 
@@ -181,6 +181,11 @@ Trying to run in test mode without providing either hte constant or a `--test` p
 
 NOTE: the output of test runs is colorized green or red according to the success or failure of the comparison, if this
 is an issue check [Colors and formatting](#colors-and-formatting) to disable it.
+
+## Clipboard access
+
+When you run the file with the `--copy <1 or 2>` flag, the lib will copy the result of the specified part into your
+clipboard, to make it easier for you to fill it on AoC.
 
 ## Utility methods
 
