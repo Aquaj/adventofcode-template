@@ -29,6 +29,29 @@ module Patches
   end
   Enumerable.include Product
 
+  module EnumMath
+    def average(&block)
+      self.sum(&block).to_f / self.count
+    end
+    alias_method :mean, :average
+
+    def median(&block)
+      return nil if self.count == 0
+      sorted = self.sort
+      sorted = sorted.map(&block) if block
+      (sorted[(self.count - 1) / 2] + sorted[self.count / 2]) / 2.0
+    end
+
+    def geometric_mean(&block)
+      coll = self.map(&(block || :itself))
+      sum = coll.reduce(0) { |memo, v| memo + Math.log(v) }
+      sum /= coll.count
+      Math.exp(sum)
+    end
+    alias_method :gmean, :geometric_mean
+  end
+  Enumerable.include EnumMath
+
   module Towards
     def towards(num)
       return self.downto(num) if self > num
