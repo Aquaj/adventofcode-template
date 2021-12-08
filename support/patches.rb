@@ -95,4 +95,15 @@ module Patches
   end
   Set.include Unwrap
   Array.include Unwrap
+
+  module ReverseHash
+    class NotReversableError < StandardError; end
+
+    def reverse
+      raise NotReversableError unless values.uniq == values
+      self.map(&:reverse).to_h
+    end
+  end
+  Hash.include ReverseHash
+
 end
