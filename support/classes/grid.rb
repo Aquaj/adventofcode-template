@@ -53,7 +53,7 @@ class Grid < SimpleDelegator
   def dfs_traverse(to_visit=[0,0], discovered=[], &block)
     discovered << to_visit
 
-    yield self[*to_visit], subtree_root if block_given?
+    yield self[*to_visit], to_visit if block_given?
 
     neighbors_of(*to_visit).each do |neighbor|
       next if self[*neighbor].nil? || discovered.include?(neighbor)
