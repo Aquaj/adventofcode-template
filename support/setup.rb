@@ -33,3 +33,7 @@ class Setup
     end
   end
 end
+
+if $0 == __FILE__
+  Setup.run
+end
