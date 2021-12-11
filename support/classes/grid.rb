@@ -9,12 +9,19 @@ class Grid < SimpleDelegator
     @width = twod_array.first.length
   end
 
+  def inspect
+    (0...@height).map do |row_i|
+      self[row_i].join
+    end.join("\n")
+  end
+
   def coords
     (0...@width).product(0...@height)
   end
 
-  def neighbors_of(*coords)
+  def neighbors_of(*coords, diagonals: false)
     offsets = [[1,0],[0,1],[-1,0],[0,-1]]
+    offsets += [[1,1],[-1,1],[1,-1],[-1,-1]] if diagonals
     offsets.map { |(x,y)| [coords.first+x, coords.last+y] }.reject { |(x,y)| out_of_bounds?(x,y) }
   end
 
