@@ -11,7 +11,7 @@ class Grid < SimpleDelegator
 
   def inspect
     (0...@height).map do |row_i|
-      self[row_i].join
+      self[row_i].map { |e| e || ' ' }.join
     end.join("\n")
   end
 
