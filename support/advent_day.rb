@@ -29,7 +29,7 @@ class AdventDay
     alias_method :copy?, :copy_to
 
     def test?
-      ARGV.include?(FLAGS[:test]) || defined?(self::EXPECTED_RESULTS)
+      !debug? && (ARGV.include?(FLAGS[:test]) || defined?(self::EXPECTED_RESULTS))
     end
 
     def debug?
@@ -59,6 +59,10 @@ class AdventDay
   # HOOK for subclass override
   def debug_input
     InputFetcher.new(day_number, YEAR, debug: true).get
+  end
+
+  def display(value)
+    puts value unless debug? && test?
   end
 
   def debug!
