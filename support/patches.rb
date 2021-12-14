@@ -1,3 +1,5 @@
+require 'set'
+
 module Patches
   module Every
     def every(n)
