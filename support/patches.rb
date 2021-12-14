@@ -108,4 +108,10 @@ module Patches
   end
   Hash.include ReverseHash
 
+  module DefaultValues
+    def with_default(*args, &block)
+      Hash.new(*args, &block).merge self
+    end
+  end
+  Hash.include DefaultValues
 end
