@@ -217,7 +217,8 @@ one in its place.
 
 -----------------------------------------
 
-# advent-of-code-20xx [![Examples](../../../actions/workflows/tests.yml/badge.svg?branch=chore/github-build)](../../../actions/workflows/tests.yml?branch=chore/github-build)
+# advent-of-code-20xx [![Examples](../../actions/workflows/examples.yml/badge.svg)](../../actions/workflows/examples.yml) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 [Advent of Code 20xx 🎄](https://adventofcode.com/year/20xx) solutions by `@yournamehere`
 
 README is based on [Jérémie Bonal's AoC Ruby template](https://github.com/aquaj/adventofcode-template).
