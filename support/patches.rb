@@ -6,7 +6,7 @@ module Patches
       self.lazy.with_index.select { |_e, i| i % n == 0 }.map { |e,i| e }.eager
     end
   end
-  Array.include Every
+  Enumerable.include Every
 
   module Nth
     def nth(n)
@@ -97,6 +97,17 @@ module Patches
   end
   Set.include Unwrap
   Array.include Unwrap
+
+  module Concatenation
+    def concat_h(ary)
+      self.transpose.concat(ary.transpose).transpose
+    end
+
+    def concat_v(ary)
+      self.concat(ary)
+    end
+  end
+  Array.include Concatenation
 
   module ReverseHash
     class NotReversableError < StandardError; end

@@ -3,6 +3,8 @@ require_relative '../patches'
 
 # Wraps a 2D array
 class Grid < SimpleDelegator
+  attr_reader :width, :height
+
   def initialize(twod_array)
     super
     @height = twod_array.length
@@ -42,6 +44,14 @@ class Grid < SimpleDelegator
     x,y = *coords
     raise ArgumentError, "#{coords.inspect} is not in grid" if out_of_bounds?(x,y)
     self[y][x] = value
+  end
+
+  def concat_h(grid_or_array)
+    Grid.new self.to_a.concat_h(grid_or_array.to_a)
+  end
+
+  def concat_v(grid_or_array)
+    Grid.new self.to_a.concat_v(grid_or_array.to_a)
   end
 
   def bfs_traverse(to_visit=nil, queue=[], discovered=[to_visit], &block)
