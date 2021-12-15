@@ -26,6 +26,7 @@ class Grid < SimpleDelegator
     offsets += [[1,1],[-1,1],[1,-1],[-1,-1]] if diagonals
     offsets.map { |(x,y)| [coords.first+x, coords.last+y] }.reject { |(x,y)| out_of_bounds?(x,y) }
   end
+  alias_method :neighbors, :neighbors_of
 
   def out_of_bounds?(x,y)
     x < 0 || x >= @width ||
@@ -78,5 +79,30 @@ class Grid < SimpleDelegator
     end
 
     discovered
+  end
+
+  module GraphMethods
+    def nodes
+      @nodes ||= coords.to_a
+    end
+
+    def edges
+      @edges ||= coords.flat_map { |s| neighbors_of(*s).map { |t| [s, t] } }
+    end
+
+    def edge_cost(_source, target)
+      self[*target]
+    end
+
+    def neighbors(node)
+      super(*node, diagonals: diagonals?)
+    end
+  end
+
+  def to_graph(diagonals: false)
+    graph = Grid.new self.to_a
+    graph.extend(GraphMethods)
+    graph.define_singleton_method(:diagonals?) {  diagonals }
+    graph
   end
 end
