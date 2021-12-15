@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 gem 'byebug'
 
+# Support libraries
+gem 'algorithms'
+
 # Framework dependencies
 gem 'dotenv'
 gem 'faraday'

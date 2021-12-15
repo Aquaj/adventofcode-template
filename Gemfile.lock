@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    algorithms (1.0.0)
     byebug (11.1.3)
     clipboard (1.3.6)
     colorize (0.8.1)
@@ -13,6 +14,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  algorithms
   byebug
   clipboard
   colorize
