@@ -1,5 +1,6 @@
 name: Examples
 on: [push]
+timeout-minutes: 30
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
