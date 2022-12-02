@@ -3,8 +3,8 @@ require 'net/http'
 
 class InputFetcher
   SESSION = ENV['SESSION']
-  INPUT_FILE_NAME_FORMAT = 'inputs/%{number}'
-  DEBUG_FILE_NAME_FORMAT = 'inputs/debug-%{number}'
+  INPUT_FILE_NAME_FORMAT = 'inputs/%<number>02d'
+  DEBUG_FILE_NAME_FORMAT = 'inputs/%<number>02d-debug'
 
   attr_reader :day_number, :year
   def debug?; @debug; end

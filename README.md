@@ -75,7 +75,7 @@ by running your files with the flag `--no-color`, or by putting `COLOR=false` in
 
 ### Test data
 
-By running the solution with the `--debug` flag, the solver will attempt to find debug data in the `inputs/debug-{day}`
+By running the solution with the `--debug` flag, the solver will attempt to find debug data in the `inputs/{day}-debug`
 file.
 
 **Example:**
