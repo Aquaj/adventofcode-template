@@ -14,7 +14,8 @@ class TestRunner
       expected = expected_results[part]
 
       info = { part: part, expected: expected.inspect, actual: actual.inspect }
-      if actual&.to_i == expected&.to_i
+
+      if compare(actual, expected)
         (SUCCESS_MESSAGE % info).green
       else
         (FAILURE_MESSAGE % info).red
@@ -23,6 +24,17 @@ class TestRunner
 
     puts "EXAMPLES: ".bold+"#{test_results.join(' | '.bold) }"
     puts
+  end
+
+  def compare(answer, expected)
+    is_expected_num = (expected.to_i.to_s == expected.to_s)
+
+    if is_expected_num
+      numerical_answer = answer.respond_to?(:to_i) ? answer.to_i : answer
+      numerical_answer == expected&.to_i
+    else
+      answer == expected
+    end
   end
 
   def actual_results
