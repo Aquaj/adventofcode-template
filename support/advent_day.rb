@@ -55,19 +55,23 @@ class AdventDay
 
   def input
     return @input if defined?(@input)
-    # Using hook methods instead of calling InputFetcher directly
+    # Using hooks instead of calling InputFetcher directly to allow override
     input_data = debug? ? debug_input : source_input
     @input ||= convert_data(input_data)
   end
 
+  def input_fetcher
+    InputFetcher.new(day_number, YEAR, debug: debug?)
+  end
+
   # HOOK for subclass override
   def source_input
-    InputFetcher.new(day_number, YEAR, debug: false).get
+    input_fetcher.get
   end
 
   # HOOK for subclass override
   def debug_input
-    InputFetcher.new(day_number, YEAR, debug: true).get
+    input_fetcher.get
   end
 
   def display(value)
