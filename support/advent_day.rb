@@ -10,8 +10,8 @@ class AdventDay
     def solve
       run_tests if test?
       results = {}
-      puts " - #{(Benchmark.measure { print "#1. #{(results[1] = self.new.first_part).inspect.bold}"  }.real * 1000).round(3)}ms"
-      puts " - #{(Benchmark.measure { print "#2. #{(results[2] = self.new.second_part).inspect.bold}" }.real * 1000).round(3)}ms"
+      puts " - #{(Benchmark.measure { print "#1. #{(results[1] = self.new.run(1)).inspect.bold}" }.real * 1000).round(3)}ms"
+      puts " - #{(Benchmark.measure { print "#2. #{(results[2] = self.new.run(2)).inspect.bold}" }.real * 1000).round(3)}ms"
       Clipboard.copy(results[copy_to]) if copy?
     end
 
@@ -34,6 +34,15 @@ class AdventDay
 
     def debug?
       ARGV.include? FLAGS[:debug]
+    end
+  end
+
+  attr_reader :part
+  def run(part)
+    @part = part
+    case part
+    when 1 then first_part
+    when 2 then second_part
     end
   end
 

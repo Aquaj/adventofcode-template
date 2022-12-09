@@ -38,7 +38,10 @@ class TestRunner
   end
 
   def actual_results
-    @actual_results ||= { 1 => test_instance.first_part, 2 => test_instance.second_part }
+    @actual_results ||= {
+      1 => test_instance.run(1),
+      2 => test_instance.run(2),
+    }
   end
 
   def test_instance
