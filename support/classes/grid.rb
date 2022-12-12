@@ -55,7 +55,7 @@ class Grid < SimpleDelegator
     Grid.new self.to_a.concat_v(grid_or_array.to_a)
   end
 
-  def bfs_traverse(to_visit=nil, queue=[], discovered=[to_visit], &block)
+  def bfs_traverse(to_visit=nil, queue=[], discovered=Set.new(to_visit), &block)
     return discovered unless to_visit
 
     yield self[*to_visit], to_visit if block_given?
@@ -68,7 +68,7 @@ class Grid < SimpleDelegator
     bfs_traverse(queue.shift, queue, discovered, &block)
   end
 
-  def dfs_traverse(to_visit=[0,0], discovered=[], &block)
+  def dfs_traverse(to_visit=[0,0], discovered=Set.new, &block)
     discovered << to_visit
 
     yield self[*to_visit], to_visit if block_given?
