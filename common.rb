@@ -8,6 +8,7 @@ FLAGS = {
   copy: '--copy',
   debug: '--debug',
   no_color: '--no-color',
+  validate: '--validate',
 }
 
 String.disable_colorization = ARGV.include?(FLAGS[:no_color]) || ENV['COLOR'] == 'false'

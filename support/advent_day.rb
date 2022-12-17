@@ -8,21 +8,34 @@ class AdventDay
 
   class << self
     def solve
+      return validate if validating?
+
       run_tests if test?
+      results = main_solve
+      Clipboard.copy(results[copy_to]) if copy?
+    end
+
+    def main_solve
       results = {}
       puts " - #{(Benchmark.measure { print "#1. #{(results[1] = self.new.run(1)).inspect.bold}" }.real * 1000).round(3)}ms"
       puts " - #{(Benchmark.measure { print "#2. #{(results[2] = self.new.run(2)).inspect.bold}" }.real * 1000).round(3)}ms"
-      Clipboard.copy(results[copy_to]) if copy?
     end
 
     def run_tests
       TestRunner.new(self).run
     end
 
-    # --test followed by space followed by 1 or 2 word-likes separated by a comma
-    TEST_FLAG_FORMAT = /#{FLAGS[:copy]} (\d)/
+    def validate
+      exit run_tests ? 0 : 1
+    rescue TestRunner::MissingTestExpectations
+      main_solve
+      exit 0
+    end
+
+    # --copy followed by space followed by 1 or 2 word-likes separated by a comma
+    COPY_FLAG_FORMAT = /#{FLAGS[:copy]} (\d)/
     def copy_to
-      match = ARGV.join(' ').match(TEST_FLAG_FORMAT)
+      match = ARGV.join(' ').match(COPY_FLAG_FORMAT)
       return unless match
       match[1].to_i
     end
@@ -33,7 +46,11 @@ class AdventDay
     end
 
     def debug?
-      ARGV.include? FLAGS[:debug]
+      validating? || ARGV.include?(FLAGS[:debug])
+    end
+
+    def validating?
+      ARGV.include? FLAGS[:validate]
     end
   end
 

@@ -13,17 +13,20 @@ class TestRunner
       actual = actual_results[part]
       expected = expected_results[part]
 
-      info = { part: part, expected: expected.inspect, actual: actual.inspect }
+      info = { part: part, expected: expected.inspect, actual: actual.inspect, success?: compare(actual, expected)}
+    end
 
-      if compare(actual, expected)
+    result_messages = test_results.map do |info|
+      if info[:success?]
         (SUCCESS_MESSAGE % info).green
       else
         (FAILURE_MESSAGE % info).red
       end
     end
-
-    puts "EXAMPLES: ".bold+"#{test_results.join(' | '.bold) }"
+    puts "EXAMPLES: ".bold+"#{result_messages.join(' | '.bold) }"
     puts
+
+    test_results.all? { |test| test[:success?] }
   end
 
   def compare(answer, expected)
@@ -48,9 +51,9 @@ class TestRunner
     day_solver.new.tap(&:debug!)
   end
 
+  class MissingTestExpectations < StandardError; end
   # --test followed by space followed by 1 or 2 word-likes separated by a comma
   EXPECTED_RESULTS_FLAG_FORMAT = /#{FLAGS[:test]} (\w+)(?:,(\w+))?/
-
   def expected_results
     return @expected_results if @expected_results
 
@@ -64,7 +67,7 @@ class TestRunner
       when defined?(day_solver::EXPECTED_RESULTS)
         day_solver::EXPECTED_RESULTS
       else
-        raise "Cannot run test without expected values"
+        raise MissingTestExpectations, "Cannot run test without expected values"
       end
   end
 end

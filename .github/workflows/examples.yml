@@ -16,6 +16,6 @@ jobs:
           for file in $(ls day*.rb)
           do
             echo $file
-            bundle exec ruby $file --debug || exit 1
+            bundle exec ruby $file --validate || exit 1
           done
           exit 0
