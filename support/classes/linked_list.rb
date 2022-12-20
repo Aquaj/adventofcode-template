@@ -50,11 +50,13 @@ class LinkedList
   end
 
   def move(link, diff, loop: true)
-    diff %= @length - 1 if loop
-    next_head = link.next(diff)
-    return link if link == next_head # already in place
+    start = link.head # New starting point since we're removing the link
     remove(link)
-    append(link, next_head)
+
+    diff %= @length if loop
+    next_head = start.next(diff)
+
+    append(link, next_head) # Putting it back in
     link
   end
 
@@ -101,7 +103,7 @@ class LinkedList
     end
 
     def previous(diff)
-      diff.abs.times.reduce(self) { |curr,_| curr.head || raise("Can't move before beginning of list") }
+      diff.times.reduce(self) { |curr,_| curr.head || raise("Can't move before beginning of list") }
     end
 
     protected
