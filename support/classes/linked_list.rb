@@ -1,60 +1,111 @@
 require_relative '../patches'
 
-# Inspired by RubyGems's Gem::List [implem](https://github.com/rubygems/rubygems/blob/master/lib/rubygems/util/list.rb)
 class LinkedList
   include Enumerable
 
-  attr_accessor :tail, :head
-  attr_reader :value, :length, :last, :first, :links
+  attr_reader :length, :last, :first, :links
 
-  def initialize(value, tail = nil)
-    @value = value
-    @tail = tail
-    if tail
-      @first = self
-      tail.head = self
-      @last = tail.last
-      @links = tail.links.tap do |l|
-        l[value] ||= []
-        l[value] << self
-      end
-      @length = tail.length + 1
-    else
-      @length = 1
-      @head = nil
-      @last = self
-      @links = { value => [self] }
-    end
+  def initialize(collection, lazy: true)
+    @links = collection.
+      map { |element| Link.new element }.
+      each_cons(2) { |head,tail| head.tail, tail.head = tail, head }
+
+    @first = @links.first
+    @last = @links.last
+    @length = collection.length
+  end
+
+  def loop!
+    @last.tail = @first
+    @first.head = @last
+  end
+
+  def inspect
+    to_a.map { |e,_| "[#{e.inspect}]" }.join(" => ")
+  end
+
+  def remove(link)
+    prev_link, next_link = link.head, link.tail
+
+    prev_link.tail = next_link if prev_link
+    next_link.head = prev_link if next_link
+
+    @length -= 1
+    @first = next_link if @first == link
+    @last = prev_link if @last == link
+
+    link
   end
 
   def each
-    n = self
-    while n
-      yield n.value, n
-      n = n.tail
-    end
-  end
-
-  def take(*,**)
-    super.map(&:first)
-  end
-
-  def prepend(value, lazy: false)
-    self.class.new(value, self).tap do |list|
-      list.propagate_caches unless lazy
-    end
-  end
-
-  def propagate_caches
-    curr = tail
-    until curr.nil?
-      curr.first = self.first
-      curr.length = self.length
+    curr = @first
+    while curr
+      yield curr.value, curr
       curr = curr.tail
     end
   end
 
-  protected
+  def to_a
+    (@length - 1).times.reduce([@first]) { |a,_| a << a.last.tail }
+  end
 
-  attr_writer :length, :first
+  def move(link, diff, loop: true)
+    diff %= @length - 1 if loop
+    next_head = link.next(diff)
+    return link if link == next_head # already in place
+    remove(link)
+    append(link, next_head)
+    link
+  end
+
+  def append(link, prev_link)
+    next_link = prev_link.tail
+    insert_between(prev_link, next_link, link)
+    @last = link if @last == prev_link
+    @length += 1
+    link
+  end
+
+  def prepend(link, next_link)
+    prev_link = next_link.head
+    insert_between(prev_link, next_link, link)
+    @first = link if @first == next_link
+    link
+  end
+
+  def insert_between(prev_link, next_link, link)
+    prev_link.tail = link if prev_link
+    next_link.head = link if next_link
+    link.head = prev_link
+    link.tail = next_link
+    link
+  end
+
+  class Link
+    include Enumerable
+
+    attr_accessor :tail, :head
+    attr_reader :value
+
+    def initialize(value, tail = nil)
+      @value = value
+      @tail = tail
+    end
+
+    def inspect
+      value.inspect
+    end
+
+    def next(diff)
+      diff.times.reduce(self) { |curr,_| curr.tail || raise("Can't move beyond end of list") }
+    end
+
+    def previous(diff)
+      diff.abs.times.reduce(self) { |curr,_| curr.head || raise("Can't move before beginning of list") }
+    end
+
+    protected
+
+    attr_writer :length, :first
+  end
 end
