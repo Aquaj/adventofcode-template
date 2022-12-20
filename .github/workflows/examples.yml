@@ -12,10 +12,5 @@ jobs:
         with:
           bundler-cache: true
       - name: Run examples
-        run: |
-          for file in $(ls day*.rb)
-          do
-            echo $file
-            bundle exec ruby $file --validate || exit 1
-          done
-          exit 0
+        run: ./bin/validate-all.sh
+        shell: bash
